@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.css">
+    <script src="/jquery-3.3.1.min.js"></script>
+    <script src="/bootstrap-4.3.1-dist/js/bootstrap.js"></script>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label for="pwd">post number:</label>
+            <input type="number" class="form-control" id="pwd" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary post">post</button>
+        <button type="submit" class="btn btn-primary comment">comment</button>
+    </div>
+    <div class="container-fluid">
+        <div class="row rowpost">
+        </div>
+        <div class="row rowcomment">
+            </div>
+    </div>
+</body>
+<script>
+
+    // function to see post
+
+    $(".post").click(function () {
+        var postnumber = $("#pwd").val();
+        var url = "https://jsonplaceholder.typicode.com/posts/";
+        console.log(url + postnumber);
+        $.ajax({
+            url: url + postnumber, success: function (result) {
+                console.log(result);
+                $(".rowpost").html(`<div class="col-lg-3"></div><div class="col-lg-6">
+                    <h1>${JSON.stringify(result.title)}
+                 </h1><p>${JSON.stringify(result.body)}
+                    </p></div><div class="col-lg-3"></div>`);
+            }
+        });
+    });
+
+    // function to see all comments of this post
+    $(".comment").click(function () {
+        var postnumber = $("#pwd").val();
+        var url = "https://jsonplaceholder.typicode.com/comments";
+        console.log(url);
+        $.ajax({
+            url:url, success: function (result) {
+                console.log(result);
+                result.forEach(element => {
+                    if (element.postId==postnumber) {
+                     $(".rowcomment").append(`<div class="col-lg-3"></div><div class="col-lg-6">
+                <h1>post  id:${JSON.stringify(element.postId)}</h1>
+                 <p> id${JSON.stringify(element.id)}</p>
+                 <p>name${JSON.stringify(element.name)}</p>
+                 <p>email${JSON.stringify(element.email)}</p>
+                 <p>${JSON.stringify(element.body)}</p>
+                 </div><div class="col-lg-3"></div>`);    
+                    }
+                    
+                });
+            }
+        });
+    });
+
+</script>
+
+</html>
